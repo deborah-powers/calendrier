@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Liste des évênements</title>
+	<meta charset='utf-8'/>
+	<link rel='stylesheet' href='library/basic-print.css'/>
+	<link rel='stylesheet' href='library/basic-screen.css'/>
+	<link rel='stylesheet' href='library/site.css'/>
+	<script src='library/angular-min.js'></script>
+	<script src='../library/func-lines.js'></script>
+	<style type='text/css'>
+	</style>
+</head>
+<body ng-app='evenments' ng-controller='controllerShowEvenments'>
+	<div class='nav'>
+		<a class='button' href='index.html'>Revenir à la page d'acceuil</a>
+		<a class='button' href='createEvenment.html'>Créer un evenement</a>
+		<a class='button' href='showEvenmentsWeek.html'>Voir les évênements de la semaine</a>
+	</div>
+	<div class='article' ng-repeat='evt in listEvenments'>
+		<h1>{{ evt.title }}</h1>
+		<p>Le {{ evt.year }} / {{ evt.month | dozen }} / {{ evt.day | dozen }} 
+			<span ng-if='(evt.hour > "00:01")'>à {{ evt.hour | dozen }}:{{ evt.minute | dozen }}, </span>
+			<span ng-if='evt.city'>dans {{ evt.city }}, </span>
+			<span ng-if='evt.adress'>au {{ evt.adress }}, </span>
+		</p>
+		<p ng-if='(evt.contact_name || evt.contact_coord)'>Contact: 
+			<span ng-if='evt.contact_name'>{{ evt.contact_name }} </span>
+			<span ng-if='evt.contact_coord'>{{ evt.contact_coord }} </span>
+		<p>{{ evt.note }}</p>
+		<p ng-if='evt.itinerary'>S'y rendre: {{ evt.itinerary }}</p>
+		<p>Priorité: <span class='color {{ evt.priority }}'></span></p>
+	</div>
+</body>
+<script type='text/javascript' src='../back/appEvenments.js'></script>
+<script type='text/javascript' src='../back/showEvenments/showEvenments.js'></script>
+<script type='text/javascript' src='../back/library/dateService.js'></script>
+</html>
