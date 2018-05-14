@@ -7,7 +7,6 @@
 	<link rel='stylesheet' href='library/basic-screen.css'/>
 	<link rel='stylesheet' href='library/site.css'/>
 	<script src='library/angular-min.js'></script>
-	<script src='../library/func-lines.js'></script>
 	<style type='text/css'>
 	</style>
 </head>
@@ -15,7 +14,12 @@
 	<div class='nav'>
 		<a class='button' href='index.html'>Revenir à la page d'acceuil</a>
 		<a class='button' href='createEvenment.html'>Créer un evenement</a>
-		<a class='button' href='showEvenmentsWeek.html'>Voir les évênements de la semaine</a>
+	</div>
+	<div class='nav'>
+		<button ng-click='showAllEvt()'>Afficher tous les événements</button>
+		<button ng-click='showWeekEvt()'>Afficher les événements de la semaine</button>
+		<button ng-click='showMonthEvt()'>Afficher les événements du mois</button>
+		<button ng-click='showDayEvt()'>Afficher les événements du jour</button>
 	</div>
 	<div class='article' ng-repeat='evt in listEvenments'>
 		<h1>{{ evt.title }}</h1>
@@ -33,6 +37,6 @@
 	</div>
 </body>
 <script type='text/javascript' src='../back/appEvenments.js'></script>
-<script type='text/javascript' src='../back/showEvenments/showEvenments.js'></script>
+<script type='text/javascript' src='../back/showEvenments/showEvenmentsAllLists.js'></script>
 <script type='text/javascript' src='../back/library/dateService.js'></script>
 </html>

@@ -70,7 +70,7 @@ class evtDate{
 			$newDate->day -=1;
 		}
 		if ($newDate->day <0){
-			$newDate->day += $this->daysInMonth [$this->month -1];
+			$newDate->day += $daysInMonth [$this->month -1];
 			if ($this->bissextile && $this->month >2) $newDate->day +=1;
 			if ($otherDate->bissextile && $otherDate->month >2) $newDate->day -=1;
 			$newDate->month -=1;

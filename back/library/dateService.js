@@ -26,6 +26,16 @@ angular.module ('evenments').service ('dateService', function(){
 		date.hour =0;
 		date.minute =0;
 	}
+	// extraire la date d'un objet
+	function fromObj (obj){
+		var date = newDate();
+		if (obj.year) date.year = obj.year;
+		if (obj.month) date.month = obj.month;
+		if (obj.day) date.day = obj.day;
+		if (obj.hour) date.hour = obj.hour;
+		if (obj.minute) date.minute = obj.minute;
+		return date;
+	}
 	// les annees bissextiles. la premiere case represente decembre, le mois avant janvier
 	const daysInMonth =[31, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 	function isBissextile (year){
@@ -39,65 +49,61 @@ angular.module ('evenments').service ('dateService', function(){
 		}
 		return bissextile;
 	}
-
-
-	// mettre la date selectionnee en forme
-	// transformer 1 en 01
-	function addO (number){
-		if (typeof (number) === 'string' && number.length ===1) number ='0'+ number;
-		else if (typeof (number) === 'number' && number <10) number ='0'+ number;
-		return number;
-	}
-	// transformer les champs en string
-	function dayToString (date){
-		let day = date.year +'/';
-		day = day + addO (date.month) +'/';
-		day = day + addO (date.day);
-		return day;
-	}
-	function hourToString (date){
-		let hour = addO (date.hour) +':';
-		hour = hour + addO (date.minute);
-		return hour;
-	}
-	// transformer des strings en champs d'un objet date
-	function dayFromString (date, strDay){
-		lstDay = strDay.split ('/');
-		date.year = parseInt (lstDay[0]);
-		date.month = parseInt (lstDay[1]);
-		date.day = parseInt (lstDay[2]);
-	}
-	function hourFromString (date, strHour){
-		lstHour = strHour.split (':');
-		date.hour = parseInt (strHour[0]);
-		date.minute = parseInt (strHour[1]);
-	}
-	// extraire la date d'un objet
-	function fromObj (obj){
-		var evtDate = newDate();
-		if (obj.year) date.year = obj.year;
-		if (obj.month) date.month = obj.month;
-		if (obj.day) date.day = obj.day;
-		if (obj.hour) date.hour = obj.hour;
-		if (obj.minute) date.minute = obj.minute;
-		return evtDate;
+	// modifier la date
+	function addMonth (date){
+		date.month +=1;
+		if (date.month >12){
+			date.month =1;
+			date.year +=1;
+			}
+		}
+	function addDay (date){
+		date.day +=1;
+		if ((date.month ==2) && (date.bissextile) && (date.day >29)){
+			date.day =1;
+			addMonth (date);
+			}
+		else if (date.day > daysInMonth [date.month]){
+			date.day =1;
+			addMonth (date);
+			}
+		}
+	function addWeek (date){
+		for (d=0; d<7; d++){ addDay (date); }
 	}
 	// comparer deux dates
 	function comparDates (date1, date2){
-		// nb jours entre deux dates
-		var nbDays =0;
-		nbDays += 365* (date1.year - date2.year);
-		nbDays
+		/* verifier si date1 > date2
+			1: date1 > date2
+			0: date1 = date2
+			-1: date1 < date2
+		*/
+		var isSup =-1;
+		if (date1.year > date2.year) isSup =1;
+		else if (date1.year == date2.year){
+			if (date1.month > date2.month) isSup =1;
+			else if (date1.month == date2.month){
+				if (date1.day > date2.day) isSup =1;
+				else if (date1.day == date2.day){
+					if (date1.hour > date2.hour) isSup =1;
+					else if (date1.hour == date2.hour){
+						if (date1.minute > date2.minute) isSup =1;
+						else if (date1.minute == date2.minute) isSup =0;
+					}
+				}
+			}
+		}
+		return isSup;
 	}
 	return {
 		newDate,
 		todayDate,
 		blankDate,
-		dayToString,
-		hourToString,
-		dayFromString,
-		hourFromString,
-		fromObj
+		fromObj,
+		addMonth,
+		addDay,
+		addWeek,
+		comparDates
 	}
 });
 angular.module ('evenments').filter ('dozen', function(){

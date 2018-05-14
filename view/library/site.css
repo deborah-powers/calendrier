@@ -9,9 +9,9 @@ css special pour mon site
 */
 /* barre de navigation */
 div.nav {
-	width: 5cm;
+	/* width: 5cm; */
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	align-items: stretch;
 }
 /* articles */

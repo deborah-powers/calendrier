@@ -55,6 +55,4 @@ function sortByDate ($evt1, $evt2){
 	return $res;
 }
 $resSort = usort ($listEvt, sortByDate);
-// echo renvoi les infos
-echo json_encode ($listEvt);
 ?>
