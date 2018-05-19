@@ -20,6 +20,7 @@
 		<button ng-click='showWeekEvt()'>Afficher les événements de la semaine</button>
 		<button ng-click='showMonthEvt()'>Afficher les événements du mois</button>
 		<button ng-click='showDayEvt()'>Afficher les événements du jour</button>
+		<button ng-click='writeEvt()'>Enregistrer les événements dans un fichier</button>
 	</div>
 	<div class='article' ng-repeat='evt in listEvenments'>
 		<h1>{{ evt.title }}</h1>
@@ -37,6 +38,6 @@
 	</div>
 </body>
 <script type='text/javascript' src='../back/appEvenments.js'></script>
-<script type='text/javascript' src='../back/showEvenments/showEvenmentsAllLists.js'></script>
+<script type='text/javascript' src='../back/showEvenments/showEvenments.js'></script>
 <script type='text/javascript' src='../back/library/dateService.js'></script>
 </html>

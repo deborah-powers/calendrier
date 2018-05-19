@@ -1,4 +1,5 @@
-angular.module ('evenments').controller ('controllerShowEvenments', function ($scope, $http, dateService){
+angular.module ('evenments').controller ('controllerShowEvenments', function ($scope, $http, $location, dateService){
+	// recuperer les evenements
 	var listEvenments =[];
 	$scope.listEvenments =[];
 	// date du jour
@@ -44,11 +45,25 @@ angular.module ('evenments').controller ('controllerShowEvenments', function ($s
 		$scope.listEvenments = listEvenments;
 	}
 	// recuperer les infos de la page php via un get
-	const pagePhp = 'http://localhost/calendrier/back/showEvenments/showEvt.php';
-	$http.get (pagePhp).then (function (response){
+	const pagePhpGetEvt = 'http://localhost/calendrier/back/showEvenments/showEvt.php';
+	$http.get (pagePhpGetEvt).then (function (response){
 		console.log ('response:', response.data);
 		// tous les evenements
 		listEvenments = response.data;
 		$scope.listEvenments = response.data;
 	});
+	// enregister les evenements dans un json
+	$scope.writeEvt = function(){
+		// recuperer le chemin du dossier actuel
+		var url = $location.absUrl();
+		var endPath = url.lastIndexOf ('/') +1;
+		url = url.slice (0, endPath);
+		// envoyer les donnees au back
+		urlAndData =[ url, $scope.listEvenments ];
+		const pagePhpWriteEvt = 'http://localhost/calendrier/back/writeEvenments.php';
+		$http.post (pagePhpWriteEvt, urlAndData).then (function (response){
+			console.log ('les evenements ont ete ecris');
+			console.log (response.data);
+		});
+	}
 });
