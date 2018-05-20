@@ -14,13 +14,18 @@
 	<div class='nav'>
 		<a class='button' href='index.html'>Revenir à la page d'acceuil</a>
 		<a class='button' href='createEvenment.html'>Créer un evenement</a>
+		<button ng-click='writeEvt()'>Enregistrer les événements dans un fichier</button>
 	</div>
 	<div class='nav'>
 		<button ng-click='showAllEvt()'>Afficher tous les événements</button>
 		<button ng-click='showWeekEvt()'>Afficher les événements de la semaine</button>
 		<button ng-click='showMonthEvt()'>Afficher les événements du mois</button>
 		<button ng-click='showDayEvt()'>Afficher les événements du jour</button>
-		<button ng-click='writeEvt()'>Enregistrer les événements dans un fichier</button>
+		<button ng-click='showByTag()'>Afficher les événements correspondant au tag:</button>
+	</div>
+	<div ng-repeat='tag in listTags | orderBy'>
+		<input type='radio' ng-model='$parent.tag' value='{{ tag }}' ng-click='chooseTag()'/>
+		<span>{{ tag }}</span>
 	</div>
 	<div class='article' ng-repeat='evt in listEvenments'>
 		<h1>{{ evt.title }}</h1>

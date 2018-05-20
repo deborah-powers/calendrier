@@ -1,12 +1,14 @@
 <?php
 class database{
-	$DBhost = '127.0.0.1:3306';
-	$DBuser = 'root';
-	$DBpassword = 'noisette416';
-	$DBname = 'deborahprrdebbie';
-	// $DBtables =[];
-	$mysqli = new mysqli ($this->DBhost, $this->DBuser, $this->DBpassword, $this->DBname) or die ($mysqli->error);
+	public $DBhost = '127.0.0.1:3306';
+	public $DBuser = 'root';
+	public $DBpassword = 'noisette416';
+	public $DBname = 'deborahprrdebbie';
+	public $mysqli = Null;
 
+	public function connect(){
+		$this->mysqli = new mysqli ($this->DBhost, $this->DBuser, $this->DBpassword, $this->DBname);
+	}
 	// recuperer le contenu de la table
 	public function getTableContent ($tableName){
 		$request = "SELECT * FROM $tableName";
@@ -24,9 +26,9 @@ class database{
 	// recuperer un objet dans la table
 	public function findObjectInDb ($tableName, $strCmd){
 		// strCmd est une string permettant d'identifier l'objet. l'echapper afin de bien le recuperer
-		$strCmd = addslashes ($strCmd);
-		$request = "SELECT * FROM $tableName WHERE $strCmd;";
-		$response = $this->mysqli->query ($request) or die ($mysqli->error);
+		// $strCmd = addslashes ($strCmd);	cette fonction fait buger le programme
+		$request = "SELECT * FROM $tableName WHERE $strCmd";
+		$response = $this->mysqli->query ($request);
 		$tableData = mysqli_fetch_all ($response);
 		return $tableData;
 	}
@@ -38,94 +40,103 @@ class database{
 		if (count ($tableData) >0) $presence =1;
 		return $presence;
 	}
+	// creer la string strCmd
+	public function createStrcmdFromArray ($array, $glue=' AND '){
+		// array est un tableau associatif (champ: valeur)
+		// glue peut valoir " AND " ou ", "
+		$listBuildStrcmd =[];
+		foreach ($array as $field => $value){
+			$tmpTxt = "$field=$value";
+			$typeValue = gettype ($value);
+			if ($typeValue == 'string'){
+				// les elements de texte sont echappes
+				$tmpValue = addslashes ($value);
+				$tmpTxt = "$field='$tmpValue'";
+			}
+			array_push ($listBuildStrcmd, $tmpTxt);
+		}
+		$strCmd = implode ($glue, $listBuildStrcmd);
+		return $strCmd;
+	}
 	// verifier si un array est dans la table
 	public function isArrayInDb ($tableName, $array){
 		// array est un tableau associatif (champ: valeur)
 		// creer strCmd
-		$listBuildStrcmd =[]
-		foreach ($array as $field => $value){
-			$tmpTxt = "$field=$value";
-			$typeValue = gettype ($value);
-			if ($typeValue == 'string') $tmpTxt = "$field='$value'";
-			array_push ($listBuildStrcmd, $tmpTxt);
-		}
-		$strCmd = implode (' AND ', $listBuildStrcmd);
+		$strCmd = $this->createStrcmdFromArray ($array);
 		// verification proprement dite
 		$presence = $this->isObjInDb ($tableName, $strCmd);
 		return $presence;
 	}
 	// enregistrer un objet dans la table
-	public function postObjToDb ($tableName, $listFields, $listValues){
+	public function postObj ($tableName, $listFields, $listValues){
 		$result =0;
 		$request = "INSERT INTO $tableName ($listFields) VALUES ($listValues)";
-		$response = $this->mysqli->query ($request) or die ($mysqli->error);
+		$response = $this->mysqli->query ($request);
 		if ($response) $result =1;
 		return $result;
 	}
 	// enregistrer un array dans la table
-	public function postArrayToDb ($tableName, $array){
+	public function postArray ($tableName, $array){
 		// array est un tableau associatif (champ: valeur)
 		// verifier si l'array est deja dans la table
 		$result =0;
 		$presence = $this->isArrayInDb ($tableName, $array);
-		if ($presence ==0){
-			$result =2;
+		if ($presence ===0){
 			// creer les listes de champs et de valeurs utilisees dans l'echange avec la bdd
-			$listFields = array_values ($array);
-			$strFields = implode (', ' $listFields);
-			$listValues = array_keys ($array);
+			$listFields = array_keys ($array);
+			$strFields = implode (', ', $listFields);
+			$listValues =[];
+			// proteger les caracteres speciaux dans les valeurs
+			foreach ($array as $key => $value){
+				$newValue = addslashes ($value);
+				array_push ($listValues, $newValue);
+			}
 			$strValues = implode ("', '", $listValues);
 			$strValues = "'". $strValues ."'";
 			// enregistrement proprement dit
-			$result = $this->postObjToDb ($tableName, $strFields, $strValues);
+			$result = $this->postObj ($tableName, $strFields, $strValues);
 		}
 		return $result;
 	}
-}
-
-
-
-
-
-
-
-
-public function updateObjToDb ($tableName, $obj){
-	$message = "l'objet n'a pas put etre update";
-	// verifier si l'objet existe deja dans la table
-	$presence = isObjInDB ($tableName, $obj);
-	if (! $presence) $message = "l'objet n'est pas dans la table";
-	else{
-		// recuperer les champ d'obj dans un array associatif
-		$objFields = get_object_vars ($obj);
-		$listToSet =[];
-		foreach ($objFields as $key => $value){
-			if (gettype ($value) == string){
-				$escapedValue = addslashes ($value);
-				$listToSet[] = "$key='$escapedValue'";
-			}
-			else $listToSet[] = "$key=$value";
+	// updater un objet dans la table
+	public function updateObj ($tableName, $strCmd, $strToset){
+		$result =0;
+		$presence = $this->isObjInDb ($tableName, $strCmd);
+		if ($presence ===0){
+			$result =2;
+			$request = "UPDATE $tableName SET $strToset WHERE $strCmd";
+			$response = $this->mysqli->query ($request) or die ($mysqli->error);
+			if ($response) $result =1;
 		}
-		$toSet = implode (', ', $listToSet);
-		// echapper le titre afin de bien le recuperer dans la table
-		$title = addslashes ($obj->title);
-		// connexion a la bdd
-		$request = "UPDATE $tableName SET $toSet WHERE title='$title' AND year=$obj->year AND month=$obj->month AND day=$obj->day";
-		$response = $this->mysqli->query ($request) or die ($mysqli->error);
-		if ($response) $message = "l'objet a ete modifie";
-		return $message;
+		return $result;
 	}
-}
-public function tableToJsonArray ($tableFields, $tableData){
+	// updater un array dans la table
+	public function updateArray ($tableName, $array, $valuesForFindingLine){
+		// array est une liste associative
+		// valuesForFindingLine est une liste associative contenant les couples (champ: valeur) permettant d'identifier l'objet a modifier
+		// creer strCmd
+		$strCmd = $this->createStrcmdFromArray ($valuesForFindingLine);
+		$result =0;
+		$presence = $this->isObjInDb ($tableName, $strCmd);
+		if ($presence ===1){
+			// creer la string des valeurs a modifier
+			$strToset = $this->createStrcmdFromArray ($valuesForFindingLine, ', ');
+			$result = $this->updateObj ($tableName, $strCmd, $strToset);
+		}
+		return $result;
+	}
 	// transforme une liste d'array simple (et le nom des colonnes) en liste d'arrays associatifs
-	$nbFields = count ($tableFields);
-	$jsonData =[];
-	foreach ($tableData as $key => $value){
-		$rowsData =[];
-		for ($i=0; $i< $nbFields; $i++){
-			$rowsData [$tableFields[$i]] = $value[$i];
+	public function toArray ($tableFields, $tableData){
+		$nbFields = count ($tableFields);
+		$jsonData =[];
+		foreach ($tableData as $key => $value){
+			$rowsData =[];
+			for ($i=0; $i< $nbFields; $i++){
+				$rowsData [$tableFields[$i]] = $value[$i];
+			}
+			$jsonData[] = $rowsData;
 		}
-		$jsonData[] = $rowsData;
+		return $jsonData;
 	}
-	return $jsonData;
 }
+?>

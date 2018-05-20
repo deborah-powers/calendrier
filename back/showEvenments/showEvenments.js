@@ -2,6 +2,15 @@ angular.module ('evenments').controller ('controllerShowEvenments', function ($s
 	// recuperer les evenements
 	var listEvenments =[];
 	$scope.listEvenments =[];
+	$scope.listTags =[];
+	// tags selectionnes
+	$scope.tag = 'Tous';
+	$scope.chooseTag = function(){
+		$scope.listEvenments =[];
+		listEvenments.forEach (function (evt){
+			if (evt.tags.indexOf ($scope.tag) >=0) $scope.listEvenments.push (evt);
+		});
+	}
 	// date du jour
 	var today = dateService.newDate();
 	dateService.todayDate (today);
@@ -51,6 +60,14 @@ angular.module ('evenments').controller ('controllerShowEvenments', function ($s
 		// tous les evenements
 		listEvenments = response.data;
 		$scope.listEvenments = response.data;
+		// les tags
+		listEvenments.forEach (function (evt){
+			listTags = evt.tags.split (', ');
+			listTags.forEach (function (tag){
+				if ($scope.listTags.indexOf (tag) <0) $scope.listTags.push (tag);
+			});
+		});
+		$scope.listTags.push ('Tous');
 	});
 	// enregister les evenements dans un json
 	$scope.writeEvt = function(){

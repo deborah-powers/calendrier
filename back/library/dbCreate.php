@@ -4,7 +4,7 @@ $DBhost = '127.0.0.1:3306';
 $DBuser = 'root';
 $DBpassword = 'noisette416';
 $DBname = 'deborahprrdebbie';
-$tableEvenments = 'evenements';
+$tableEvenments = 'events';
 // $tableContacts = 'contacts';
 // Create mysql connection
 $mysqli = new mysqli ($DBhost, $DBuser, $DBpassword);
@@ -16,10 +16,10 @@ if ($mysqli->connect_errno) {
 	// On sort du programme
 	die();
 }
-/* creer la bdd. je l'ai deja cree lors d'un precedent lancement du script
+// creer la bdd. je l'ai deja cree lors d'un precedent lancement du script
 if (! $mysqli->query ("CREATE DATABASE $DBname") ) {
 	printf("Errormessage: %s\n", $mysqli->error);
-}*/
+}
 // selectionner la bdd
 mysqli_select_db ($mysqli, $DBname);
 // creer la table

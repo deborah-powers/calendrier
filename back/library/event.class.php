@@ -1,7 +1,7 @@
 <?php
 // traiter les dates
 include ('date.class.php');
-class evenment{
+class event{
 	// la date
 	public $year = 2018;
 	public $month = 1;
@@ -48,12 +48,12 @@ class evenment{
 		$this->fromJson ($jsonObj);
 	}
 	public function copy(){
-		$newEvt = new evenment();
+		$newEvt = new event();
 		$newEvt->fromJson ($this);
 		return $newEvt;
 	}
-	// transformer l'objet en tableau associatif. le convertir en objet evenmentDb
-	function toTable(){
+	// transformer l'objet en tableau associatif. le convertir en objet eventDb
+	function toArray(){
 		$table = get_object_vars ($this);
 		return $table;
 	}

@@ -1,20 +1,27 @@
 <?php
+function printp ($nb){
+	echo "<p>Coucou $nb</p>";
+}
 // cross-origin, a modifier pour updater les evts
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Content-Type');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 // dependences
-include ('../library/evenment.class.php');
-include ('../library/dbConnect.php');
+include ('../library/tablesNames.php');
+include ('../library/database.class.php');
+include ('../library/event.class.php');
+include_once ('../library/date.class.php');
 // recuperer les donnees de la bdd
-$result = getTableContent ($tableEvenments, $mysqli);
+$db = new database();
+$db->connect();
+$result = $db->getTableContent ($tableEvt, $mysqli);
 $tableFields = $result[0];
 $tableData = $result[1];
-$jsonData = tableToJsonArray ($tableFields, $tableData);
-// transformer les pseudo-json en objets evenment
+$jsonData = $db->toArray ($tableFields, $tableData);
+// transformer les pseudo-json en objets event
 $listEvt =[];
 foreach ($jsonData as $value){
-	$evt = new evenment();
+	$evt = new event();
 	$evt->fromArray ($value);
 	$listEvt[] = $evt;
 }
@@ -43,7 +50,7 @@ foreach ($listEvt as $evt){
 			}
 			$evt->fromDate ($evtDate);
 		}
-		$message = updateObjToDb ($tableEvenments, $evt, $mysqli);
+		$message = updateObjToDb ($tableevents, $evt, $mysqli);
 	}
 }
 // trier les evt par date
