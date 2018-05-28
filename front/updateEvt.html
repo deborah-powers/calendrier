@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>formulaire de modification d'événement</title>
+	<meta name='viewport' content='width=device-width,initial-scale=1'/>
+	<meta charset='utf-8'/>
+	<link rel='stylesheet' href='css/basic-print.css'/>
+	<link rel='stylesheet' href='css/basic-screen.css'/>
+	<link rel='stylesheet' href='css/site.css'/>
+	<script src='library/angular.js'></script>
+</head>
+<body ng-app='events' ng-controller='controllerUpdateEvt'>
+	<div class='nav'>
+		<a class='button' href='index.html'>Revenir à la page d'acceuil</a>
+		<a class='button' href='createEvt.html'>Créer un événement</a>
+	</div>
+	<h1>{{ message.title }}</h1>
+	<form>
+		<date date='date'></date>
+		<place place='place'></place>
+		<contact contact='contact'></contact>
+		<message message='message'></message>
+		<button ng-click='updateEvt()'>Modifier l'évênement</button>
+	</form>
+	<div class='article' ng-repeat='evt in listEvt'>
+		<h1>{{ evt.title }}</h1>
+		<p>Le {{ evt.year }} / {{ evt.month | decade }} / {{ evt.day | decade }}</p>
+		<button class='modify-evt' ng-click='selectEvt($index)'>Modifier</button>
+	</div>
+</body>
+<script type='text/javascript' src='library/appEvt.js'></script>
+<script type='text/javascript' src='updateEvt/updateEvtController.js'></script>
+<script type='text/javascript' src='library/serviceDate.js'></script>
+<script type='text/javascript' src='library/serviceEvent.js'></script>
+<script type='text/javascript' src='updateEvt/updateEvtComponents.js'></script>
+</html>

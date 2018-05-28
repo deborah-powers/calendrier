@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Liste des événements</title>
+	<meta name='viewport' content='width=device-width,initial-scale=1'/>
+	<meta charset='utf-8'/>
+	<link rel='stylesheet' href='css/basic-print.css'/>
+	<link rel='stylesheet' href='css/basic-screen.css'/>
+	<link rel='stylesheet' href='css/site.css'/>
+	<script src='library/angular.js'></script>
+</head>
+<body ng-app='events' ng-controller='controllerShowEvt'>
+	<div class='nav'>
+		<a class='button' href='createEvt.html'>Créer un événement</a>
+		<a class='button' href='updateEvt.html'>Modifier un événement</a>
+		<button ng-click='writeEvt()'>Enregistrer les événements dans un fichier</button>
+	</div>
+	<div class='nav'>
+		<button ng-click='showAllEvt()'>Afficher tous les événements</button>
+		<button ng-click='showWeekEvt()'>Afficher les événements de la semaine</button>
+		<button ng-click='showMonthEvt()'>Afficher les événements du mois</button>
+		<button ng-click='showDayEvt()'>Afficher les événements du jour</button>
+	</div>
+	<div>
+		<h1>Afficher les éléments correspondant au tag:</h1>
+		<p ng-repeat='tag in listTags | orderBy'>
+			<input type='radio' ng-model='$parent.tag' value='{{ tag }}' ng-click='chooseTag()'/>
+			<span>{{ tag }}</span>
+		</p>
+	</div>
+	<div class='article' ng-repeat='evt in listEvt'>
+		<h1>{{ evt.title }}</h1>
+		<p>Le {{ evt.day }}/{{ evt.month | decade }}/{{ evt.year | decade }}</p>
+		<p ng-if='(evt.hour >8 && evt.minute >00)'>A {{ evt.hour | decade }}:{{ evt.minute | decade }}</p>
+		<p>{{ evt.note }}</p>
+		<p>Priorité: <span class='color {{ evt.priority }}'></span></p>
+		<h2>Lieu</h2>
+		<p>Ville: {{ evt.city }}</p>
+		<p>Adresse: {{ evt.adress }}</p>
+		<p>itinéraire: {{ evt.itinerary }}</p>
+		<h2>Contact</h2>
+		<p>Nom: {{ evt.contact_name }}</p>
+		<p>Coordonnée: {{ evt.contact_coord }}</p>
+		<button class='modify-evt' ng-click='deleteEvt($index)'>Supprimer</button>
+	</div>
+</body>
+<script type='text/javascript' src='library/appEvt.js'></script>
+<script type='text/javascript' src='showEvt/showEvtController.js'></script>
+<script type='text/javascript' src='library/serviceDate.js'></script>
+</html>
