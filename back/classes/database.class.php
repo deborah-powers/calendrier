@@ -1,13 +1,5 @@
 <?php
 class database{
-	/* pour ovh
-	public $DBhost = 'deborahprrdebbie.mysql.db';
-	public $DBuser = 'deborahprrdebbie';
-	public $DBpassword = 'Noisette416';
-	public $DBname = 'deborahprrdebbie';
-	*/
-	/* en local
-	*/
 	public $DBhost = '127.0.0.1:3306';
 	public $DBuser = 'root';
 	public $DBpassword = 'noisette416';
