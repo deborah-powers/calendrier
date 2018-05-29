@@ -88,7 +88,7 @@ angular.module ('events').controller ('controllerShowEvt', function ($scope, $ht
 		// B) supprimer l'element de la bdd
 		const pagePhpDelEvt = 'http://localhost/calendrier/back/actions/deleteEvt.php';
 		$http.post (pagePhpDelEvt, toDelete).then (function (response){
-			console.log ('response:', response.data);
+			console.log ('reponse du delete:', response.data);
 		});
 	}
 
@@ -99,11 +99,10 @@ angular.module ('events').controller ('controllerShowEvt', function ($scope, $ht
 		var endPath = url.lastIndexOf ('/') +1;
 		url = url.slice (0, endPath);
 		// envoyer les donnees au back
-		urlAndData =[ url, $scope.listEvt ];
-		const pagePhpWriteEvt = 'http://localhost/calendrier/back/writeEvt.php';
+		var urlAndData =[ url, $scope.listEvt ];
+		const pagePhpWriteEvt = 'http://localhost/calendrier/back/actions/writeEvt.php';
 		$http.post (pagePhpWriteEvt, urlAndData).then (function (response){
-			console.log ('les evenements ont ete ecris');
-			console.log (response.data);
+			console.log ("reponse de l'ecriture:", response.data);
 		});
 	}
 });

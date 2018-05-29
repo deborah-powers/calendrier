@@ -7,7 +7,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 include ('../classes/event.class.php');
 include ('../classes/database.class.php');
 include ('../classes/tablesNames.php');
-// A) recuperer les infos du formulaire envoyees par angular
+// recuperer les infos du formulaire envoyees par angular
 // angularData est une string
 $angularData = file_get_contents ('php://input');
 // objet evt
