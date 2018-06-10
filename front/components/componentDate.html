@@ -1,5 +1,5 @@
 <fieldset>
-	<h1>Choisissez la date</h1>
+	<h2>Choisissez la date</h2>
 	<input type='button' value='Date du jour' ng-click='todayDate(date)'/>
 	<input type='button' value='Date par défaut' ng-click='blankDate(date)'/>
 	<p>Date: {{ $ctrl.date.year }}/{{ $ctrl.date.month | decade }}/{{ $ctrl.date.day | decade }}, {{ $ctrl.date.hour | decade }}:{{ $ctrl.date.minute | decade }}</p>

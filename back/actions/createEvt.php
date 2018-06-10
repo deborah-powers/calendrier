@@ -2,7 +2,7 @@
 // cross-origin, a modifier pour updater les evts
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Content-Type');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Methods: GET, POST');
 // dependences
 include ('../classes/event.class.php');
 include ('../classes/database.class.php');

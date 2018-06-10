@@ -6,10 +6,10 @@ creation: 2018/03/17
 update: 2018/03/17
 
 css special pour mon site
-*/
 body {
 	max-width: 12cm;
 }
+*/
 /* barre de navigation */
 div.nav {
 	/* width: 5cm; */
@@ -32,14 +32,13 @@ h2 {
 	margin-bottom: 1em;
 	text-align: center;
 }
+/* formulaires */
+fieldset { border: none; }
 button.modify-evt {
 	margin-left: 40%;
 }
 /* les images */
 img { max-width: 4cm; }
-@media (min-width: 600px){
-	img { float: right; }
-}
 /* priorite des evenements */
 span.color {
 	display: inline-block;
@@ -50,3 +49,19 @@ span.color {
 span.low { background-color: #4BB; }
 span.high { background-color: red; }
 span.old { background-color: #820; }
+/* pour les ordi, avec un écran large */
+@media (min-width: 600px){
+	img { float: right; }
+	form {
+		column-count: 3;
+		-moz-column-count: 3;
+		-webkit-column-count: 3;
+		-o-column-count: 3;
+	}
+	fieldset .row { flex-direction: column; }
+	div.article-container {
+		display: flex;
+		flex-wrap: wrap;
+	}
+	div.article { width: 50%; }
+}

@@ -28,7 +28,6 @@ input, button, a.button, textarea {
 	padding: 2mm;
 	border-radius: 2mm;
 }
-input { background-color: #FC8; }
 button, a.button, input[type='button'], input[type='submit'] {
 	color: #FC8;
 	background-color: #820;

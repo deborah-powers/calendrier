@@ -1,9 +1,9 @@
 <?php
 class database{
-	public $DBhost = 'host:3306';
-	public $DBuser = 'user';
-	public $DBpassword = 'password';
-	public $DBname = 'dbName';
+	public $DBhost = '127.0.0.1:3306';
+	public $DBuser = 'root';
+	public $DBpassword = 'noisette416';
+	public $DBname = 'deborahprrdebbie';
 	public $mysqli = Null;
 	public function connect(){
 		$this->mysqli = new mysqli ($this->DBhost, $this->DBuser, $this->DBpassword, $this->DBname) or die ($this->mysqli->error);

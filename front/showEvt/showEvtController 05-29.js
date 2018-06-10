@@ -29,10 +29,9 @@ angular.module ('events').controller ('controllerShowEvt', function ($scope, $ht
 			$scope.listEvt = listEvt;
 		}
 		else{
-			var lengthList = $scope.listEvt.length;
-			for (i=lengthList-1; i>0; i--){
-				if ($scope.listEvt[i].tags.indexOf ($scope.tag) ===-1) $scope.listEvt.splice (i,1);
-			}
+			listEvt.forEach (function (evt){
+				if (evt.tags.indexOf ($scope.tag) >=0) $scope.listEvt.push (evt);
+			});
 		}
 	}
 
@@ -44,8 +43,8 @@ angular.module ('events').controller ('controllerShowEvt', function ($scope, $ht
 		return (evt.year == today.year) && (evt.month == today.month);
 	}
 	$scope.showMonthEvt = function(){
-		$scope.chooseTag();
-		$scope.listEvt = $scope.listEvt.filter (findMonthEvt);
+		$scope.listEvt =[];
+		$scope.listEvt = listEvt.filter (findMonthEvt);
 	}
 	// reperer les evenements de la semaine
 	var nextWeek = dateService.newDate();
@@ -62,22 +61,21 @@ angular.module ('events').controller ('controllerShowEvt', function ($scope, $ht
 		return res;
 	}
 	$scope.showWeekEvt = function(){
-		$scope.chooseTag();
-		$scope.listEvt = $scope.listEvt.filter (findWeekEvt);
+		$scope.listEvt =[];
+		$scope.listEvt = listEvt.filter (findWeekEvt);
 	}
 	// reperer les evenements du jour
 	function findDayEvt (evt){
 		return (evt.year == today.year) && (evt.month == today.month) && (evt.day == today.day);
 	}
 	$scope.showDayEvt = function(){
-		$scope.chooseTag();
-		$scope.listEvt = $scope.listEvt.filter (findDayEvt);
+		$scope.listEvt =[];
+		$scope.listEvt = listEvt.filter (findDayEvt);
 	}
 	// recuperer tous les evenements
 	$scope.showAllEvt = function(){
 		$scope.listEvt =[];
 		$scope.listEvt = listEvt;
-		$scope.chooseTag();
 	}
 
 	// supprimer un evt
